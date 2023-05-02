@@ -1,3 +1,7 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Scanner;
+
 public class Test {
     public static void main(String[] args) {
 
@@ -22,5 +26,70 @@ public class Test {
         Print how many students are MathStudent with message -> "Math students = {numberOfMathStudents}"
         Print how many students are ScienceStudent with message -> "Science students = {numberOfScienceStudents}"
          */
+
+        Scanner input = new Scanner(System.in);
+        int joins = 0;
+        int math = 0;
+        int science = 0;
+        ArrayList<Student> students = new ArrayList<>();
+
+        do {
+            System.out.println(UserQuestions.askToJoin);
+            String join = input.next();
+            if (join.toLowerCase().startsWith("y")) {
+                System.out.println(UserQuestions.askFirstName);
+                String firstName = input.next();
+
+                System.out.println(UserQuestions.askLastName);
+                String lastName = input.next();
+
+                System.out.println(UserQuestions.askAge);
+                int age = input.nextInt();
+
+                try {
+                    Permission.checkAge(age);
+                } catch (RuntimeException e) {
+                    System.out.println(age + " is not allowed!");
+                    continue;
+                }
+
+                System.out.println(UserQuestions.askGender);
+                String gender = input.next().toUpperCase();
+
+                System.out.println(UserQuestions.askClassName);
+                String className = input.next();
+
+                try {
+                    Permission.checkClassName(className);
+                } catch (RuntimeException e) {
+                    System.out.println(className + "is not allowed!");
+                    continue;
+                }
+
+                if (age > 20 && (className.equalsIgnoreCase("math") || className.equalsIgnoreCase("science"))) {
+                    if (className.equalsIgnoreCase("math")) math++;
+                    else science++;
+                    joins++;
+
+                    Student std = new Student(firstName, lastName, age, gender, className);
+                    students.add(std);
+                    System.out.println("Congratulations! You are registered for " + className + " class");
+                }
+
+            }
+        }
+        while (joins < 3);
+
+        for (Student student : students) {
+            System.out.println(student.getClassName() + student);
+            System.out.println();
+        }
+
+
+        System.out.println("Math students = " + math);
+        System.out.println();
+        System.out.println("Science students = " + science);
+
+
     }
 }
